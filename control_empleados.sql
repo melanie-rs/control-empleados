@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-10-2026 a las 19:16:48
+-- Tiempo de generación: 14-10-2026 a las 19:24:52
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -44,7 +44,7 @@ INSERT INTO `empleados` (`id`, `dni`, `clave`, `nombre`, `apellido`, `activo`) V
 (1, '40111222', '$2y$10$oU0sY0DPaZQwWb43l1X3CO5iFSxq5QV1l657ZJt1MaAJ6GLSY3Qnu', 'Ana', 'Gomez', 1),
 (2, '40222333', '$2y$10$ydSLMvvXpU0d.OglUGKIXuyZhzT6o0niyH29bc8MCCERxFKTv5zKC', 'Juan', 'Perez', 1),
 (3, '40333444', '$2y$10$slht4SflTm7ddTozM45ED.3.vh.PTUyH9fZYZKCzMeSshAVwMDFue', 'Lucia', 'Martinez', 1),
-(4, '44827318', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 'Nala', 'Diaz', 1);
+(4, '40444555', '$2y$10$fA2WwtHS7PLveiD2MIQ57uSzcjrNB7Ky8tjh/o7U3Yx1coKKt0M/q', 'Miguel', 'Lopez', 1);
 
 -- --------------------------------------------------------
 
@@ -68,7 +68,20 @@ INSERT INTO `movimientos` (`id`, `empleado_id`, `tipo`, `fecha_hora`) VALUES
 (2, 1, 'egreso', '2026-10-13 13:41:20'),
 (3, 1, 'ingreso', '2026-10-13 13:42:22'),
 (4, 1, 'egreso', '2026-10-13 13:42:56'),
-(5, 2, 'ingreso', '2026-10-13 14:06:22');
+(5, 2, 'ingreso', '2026-10-13 14:06:22'),
+(6, 2, 'egreso', '2026-10-13 14:32:51'),
+(7, 1, 'ingreso', '2026-10-14 12:01:05'),
+(8, 1, 'egreso', '2026-10-14 12:01:11'),
+(9, 1, 'ingreso', '2026-10-14 12:03:19'),
+(10, 1, 'egreso', '2026-10-14 12:03:28'),
+(11, 4, 'ingreso', '2026-10-14 13:24:13'),
+(12, 4, 'egreso', '2026-10-14 13:24:15'),
+(13, 4, 'ingreso', '2026-10-14 13:45:57'),
+(14, 4, 'egreso', '2026-10-14 13:46:03'),
+(15, 4, 'ingreso', '2026-10-14 14:02:03'),
+(16, 4, 'egreso', '2026-10-14 14:02:37'),
+(17, 4, 'ingreso', '2026-10-14 14:09:08'),
+(18, 4, 'egreso', '2026-10-14 14:09:28');
 
 --
 -- Índices para tablas volcadas
@@ -96,13 +109,13 @@ ALTER TABLE `movimientos`
 -- AUTO_INCREMENT de la tabla `empleados`
 --
 ALTER TABLE `empleados`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `movimientos`
 --
 ALTER TABLE `movimientos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- Restricciones para tablas volcadas
