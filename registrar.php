@@ -4,22 +4,28 @@ session_start();
 
 require_once "config.php";
 
-// Verificar que el empleado haya iniciado sesión.
+// Verificar que el empleado haya iniciado sesión
 if (!isset($_SESSION["empleado_id"])) {
     header("Location: login.php");
     exit;
 }
 
-// Aceptar únicamente solicitudes POST.
+// Impide que se registre otro movimiento mientras el sistema está mostrando la confirmación del anterior
+if (isset($_SESSION["confirmando_movimiento"])) {
+    header("Location: panel.php");
+    exit;
+}
+
+// Aceptar únicamente solicitudes POST
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: panel.php");
     exit;
 }
 
-// Obtener el movimiento solicitado.
+// Obtener el movimiento solicitado
 $tipo = $_POST["tipo"] ?? "";
 
-// Validar que sea ingreso o egreso.
+// Validar que sea ingreso o egreso
 if ($tipo !== "ingreso" && $tipo !== "egreso") {
     header("Location: panel.php");
     exit;
@@ -27,7 +33,7 @@ if ($tipo !== "ingreso" && $tipo !== "egreso") {
 
 $empleadoId = $_SESSION["empleado_id"];
 
-// Buscar el último movimiento del empleado.
+// Buscar el último movimiento del empleado
 $sql = "SELECT tipo
         FROM movimientos
         WHERE empleado_id = ?
@@ -48,13 +54,16 @@ $ultimoMovimiento = $resultado->fetch_assoc();
 
 $stmt->close();
 
-// Impedir dos movimientos iguales consecutivos.
-if ($ultimoMovimiento && $ultimoMovimiento["tipo"] === $tipo) {
+// Validar que los movimientos sigan una secuencia correcta.
+if (
+    (!$ultimoMovimiento && $tipo !== "ingreso") ||
+    ($ultimoMovimiento && $ultimoMovimiento["tipo"] === $tipo)
+) {
     header("Location: panel.php?error=movimiento");
     exit;
 }
 
-// Guardar el nuevo movimiento.
+// Guardar el nuevo movimiento
 $sql = "INSERT INTO movimientos (empleado_id, tipo)
         VALUES (?, ?)";
 
@@ -66,7 +75,12 @@ if (!$stmt) {
 
 $stmt->bind_param("is", $empleadoId, $tipo);
 
+
 if ($stmt->execute()) {
+    $_SESSION["confirmando_movimiento"] = true;
+    $_SESSION["tipo_movimiento_confirmado"] = $tipo;
+    $_SESSION["confirmacion_expira"] = time() + 3;
+
     header("Location: panel.php?registro=ok");
     exit;
 }

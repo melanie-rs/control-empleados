@@ -9,8 +9,42 @@
         exit;
     }
 
+    if (isset($_SESSION["confirmando_movimiento"])) {
+        if (
+            !isset($_SESSION["confirmacion_expira"]) ||
+            time() >= $_SESSION["confirmacion_expira"]
+        ) {
+            header("Location: logout.php");
+            exit;
+            }
+    }
+    
     $nombre = $_SESSION["empleado_nombre"];
     $apellido = $_SESSION["empleado_apellido"];
+
+    
+    $sql_ultimo = "SELECT tipo, fecha_hora
+                    FROM movimientos
+                    WHERE empleado_id = ?
+                    ORDER BY fecha_hora DESC, id DESC
+                    LIMIT 1";
+
+    $stmt_ultimo = $conexion->prepare($sql_ultimo);
+
+    if (!$stmt_ultimo) {
+        die("No se pudo consultar el último movimiento.");
+    }
+
+    $stmt_ultimo->bind_param("i", $_SESSION["empleado_id"]);
+    $stmt_ultimo->execute();
+
+    $resultado_ultimo = $stmt_ultimo->get_result();
+    $ultimoMovimiento = $resultado_ultimo->fetch_assoc();
+
+    $stmt_ultimo->close();
+
+    $ultimoTipo = $ultimoMovimiento["tipo"] ?? null;
+
 
 ?>
 
@@ -41,27 +75,89 @@
             <a href="logout.php" class="btn-logout-inline"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesion</a>
         </p>
 
-        <p class="panel-desc-info">Desde aqui podras registrar tu ingreso y tu egreso.</p>
-
-        <?php if (isset($_GET["registro"]) && $_GET["registro"] === "ok"): ?>
-            <div class="success-msg">¡Movimiento registrado correctamente!</div>
+        <?php if ($ultimoMovimiento): ?>
+        <p class="panel-desc-info">
+                Tu último registro fue:
+            <strong><?php echo htmlspecialchars(strtoupper($ultimoMovimiento["tipo"])); ?></strong>
+                a las
+            <strong><?php echo date("H:i", strtotime($ultimoMovimiento["fecha_hora"])); ?></strong>
+                del
+            <strong><?php echo date("d/m/Y", strtotime($ultimoMovimiento["fecha_hora"])); ?></strong>.
+        </p>
+        <?php else: ?>
+        <p class="panel-desc-info">
+            Todavía no tenés movimientos registrados.
+        </p>
         <?php endif; ?>
+
+
+
+        <?php if (isset($_SESSION["confirmando_movimiento"])): ?>
+
+            <div class="success-msg">
+                ¡<?php echo htmlspecialchars(strtoupper($_SESSION["tipo_movimiento_confirmado"])); ?>
+                registrado correctamente!
+
+                <p>
+                    La sesión se cerrará en
+                    <strong id="cuenta-regresiva">3</strong>
+                    segundos...
+                </p>
+            </div>
+            
+        <script>
+            const horaLimite = <?php echo (int) $_SESSION["confirmacion_expira"]; ?>;
+            const contador = document.getElementById("cuenta-regresiva");
+
+            function actualizarCuentaRegresiva() {
+                const ahora = Math.floor(Date.now() / 1000);
+                const segundos = Math.max(0, horaLimite - ahora);
+
+                contador.textContent = segundos;
+
+                if (segundos <= 0) {
+                    window.location.href = "logout.php";
+                }
+            }
+
+            actualizarCuentaRegresiva();
+            const temporizador = setInterval(actualizarCuentaRegresiva, 200);
+        </script>
+
+        <?php endif; ?>
+
 
         <?php if (isset($_GET["error"]) && $_GET["error"] === "movimiento"): ?>
             <div class="error-msg">No podes registrar dos movimientos iguales seguidos.</div>
         <?php endif; ?>
 
+        <?php if (!isset($_SESSION["confirmando_movimiento"])): ?>
         <div class="action-buttons-container">
-            <form action="registrar.php" method="POST">
-                <input type="hidden" name="tipo" value="ingreso">
-                <button type="submit" class="btn-action-custom btn-ingreso"><i class="fa-solid fa-arrow-right-to-bracket"></i> Registrar ingreso</button>
-            </form>
 
-            <form action="registrar.php" method="POST">
-                <input type="hidden" name="tipo" value="egreso">
-                <button type="submit" class="btn-action-custom btn-egreso"><i class="fa-solid fa-arrow-right-from-bracket"></i> Registrar egreso</button>
-            </form>
+            <?php if ($ultimoTipo === null || $ultimoTipo === "egreso"): ?>
+
+                <form action="registrar.php" method="POST">
+                    <input type="hidden" name="tipo" value="ingreso">
+                        <button type="submit" class="btn-action-custom btn-ingreso">
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                            Registrar ingreso
+                        </button>
+                </form>
+
+            <?php elseif ($ultimoTipo === "ingreso"): ?>
+
+                <form action="registrar.php" method="POST">
+                    <input type="hidden" name="tipo" value="egreso">
+                        <button type="submit" class="btn-action-custom btn-egreso">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            Registrar egreso
+                        </button>
+                </form>
+
+            <?php endif; ?>
+
         </div>
+        <?php endif; ?>
 
         <h2 class="history-title"><i class="fa-regular fa-clock"></i> Historial de movimientos</h2>
 
