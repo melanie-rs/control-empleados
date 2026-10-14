@@ -1,4 +1,3 @@
-
 <?php
 
     $conexion = new mysqli(
