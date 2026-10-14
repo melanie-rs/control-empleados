@@ -18,10 +18,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (!empty($nombre) && !empty($apellido) && !empty($dni) && !empty($password)) {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
-
-        $sql_insert = "INSERT INTO empleados (nombre, apellido, dni, password) VALUES (?, ?, ?, ?)";
+       
+        $sql_insert = "INSERT INTO empleados (nombre, apellido, dni, clave) VALUES (?, ?, ?, ?)";
         $stmt_insert = $conexion->prepare($sql_insert);
-        
+
         if ($stmt_insert) {
             $stmt_insert->bind_param("ssss", $nombre, $apellido, $dni, $password_hash);
             if ($stmt_insert->execute()) {

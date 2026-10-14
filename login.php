@@ -91,13 +91,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     >
                 </div>
 
-                <div class="form-options">
-                    <label class="remember-me">
-                        <input type="checkbox"> Recordarme
-                    </label>
-                    <a href="#" class="forgot-password">¿Olvido su contraseña?</a>
-                </div>
-
                 <button type="submit" class="btn-submit">Ingresar</button>
 
             </form>
