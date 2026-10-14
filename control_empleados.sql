@@ -43,7 +43,8 @@ CREATE TABLE `empleados` (
 INSERT INTO `empleados` (`id`, `dni`, `clave`, `nombre`, `apellido`, `activo`) VALUES
 (1, '40111222', '$2y$10$oU0sY0DPaZQwWb43l1X3CO5iFSxq5QV1l657ZJt1MaAJ6GLSY3Qnu', 'Ana', 'Gomez', 1),
 (2, '40222333', '$2y$10$ydSLMvvXpU0d.OglUGKIXuyZhzT6o0niyH29bc8MCCERxFKTv5zKC', 'Juan', 'Perez', 1),
-(3, '40333444', '$2y$10$slht4SflTm7ddTozM45ED.3.vh.PTUyH9fZYZKCzMeSshAVwMDFue', 'Lucia', 'Martinez', 1);
+(3, '40333444', '$2y$10$slht4SflTm7ddTozM45ED.3.vh.PTUyH9fZYZKCzMeSshAVwMDFue', 'Lucia', 'Martinez', 1),
+(4, '44827318', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 'Nala', 'Diaz', 1);
 
 -- --------------------------------------------------------
 

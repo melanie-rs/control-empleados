@@ -1,13 +1,10 @@
 <?php
-
 session_start();
-
 require_once "config.php";
 
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
     $dni = trim($_POST["dni"] ?? "");
     $clave = $_POST["clave"] ?? "";
 
@@ -23,15 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $stmt->bind_param("s", $dni);
     $stmt->execute();
-
     $resultado = $stmt->get_result();
     $empleado = $resultado->fetch_assoc();
 
-    if (
-        $empleado &&
-        password_verify($clave, $empleado["clave"])
-    ) {
-
+    if ($empleado && password_verify($clave, $empleado["clave"])) {
         session_regenerate_id(true);
 
         $_SESSION["empleado_id"] = $empleado["id"];
@@ -40,14 +32,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         header("Location: panel.php");
         exit;
-
     } else {
         $error = "DNI o contraseña incorrectos.";
     }
 
     $stmt->close();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -55,46 +45,69 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar sesión</title>
+    <title>Iniciar Sesion - Control de Empleados</title>
+    <!-- Vinculo iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/estilo.css">
 </head>
 <body>
 
-    <h1>Control de empleados</h1>
+    <div class="login-container">
+        <!-- Esta es la columna izquierda del formulario -->
+        <div class="login-form-section">
+            <div class="form-header">
+                <a href="index.php" class="btn-volver"><i class="fa-solid fa-arrow-left"></i> Volver al inicio</a>
+                <h2>Inicie Sesion</h2>
+            </div>
 
-    <h2>Iniciar sesión</h2>
+            <?php if ($error !== ""): ?>
+                <div class="error-msg"><?php echo htmlspecialchars($error); ?></div>
+            <?php endif; ?>
 
-    <?php if ($error !== ""): ?>
-        <p><?php echo htmlspecialchars($error); ?></p>
-    <?php endif; ?>
+            <form action="login.php" method="POST" class="form-content">
+                
+                <div class="input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input
+                        type="text"
+                        id="dni"
+                        name="dni"
+                        placeholder="DNI"
+                        inputmode="numeric"
+                        pattern="[0-9]{1,15}"
+                        maxlength="15"
+                        required
+                    >
+                </div>
 
-    <form action="login.php" method="POST">
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input
+                        type="password"
+                        id="clave"
+                        name="clave"
+                        placeholder="Contraseña"
+                        required
+                    >
+                </div>
 
-        <label for="dni">DNI:</label>
-        <input
-            type="text"
-            id="dni"
-            name="dni"
-            inputmode="numeric"
-            pattern="[0-9]{1,15}"
-            maxlength="15"
-            required
-        >
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox"> Recordarme
+                    </label>
+                    <a href="#" class="forgot-password">¿Olvido su contraseña?</a>
+                </div>
 
-        <br><br>
+                <button type="submit" class="btn-submit">Ingresar</button>
 
-        <label for="clave">Contraseña:</label>
-        <input
-            type="password"
-            id="clave"
-            name="clave"
-            required
-        >
+            </form>
+        </div>
 
-        <br><br>
-
-        <button type="submit">Ingresar</button>
-
-    </form>
+        <!-- y esta la columna derecha del Panel Decorativo lilita -->
+        <div class="login-banner-section">
+            <div class="banner-overlay"></div>
+        </div>
+    </div>
 
 </body>
 </html>
