@@ -1,0 +1,26 @@
+USUARIOS DE EMPLEADOS:
+
+Ana Gómez: 
+	DNI: 40111222	
+	CONTRASEÑA: Empleado123
+
+Juan Pérez: 
+	DNI: 40222333	
+	CONTRASEÑA: Empleado456
+
+Lucia Martinez: 
+	DNI: 40333444
+	CONTRASEÑA: Empleado789
+
+Miguel López: 
+	DNI: 40444555	
+	CONTRASEÑA: Empleado321
+
+
+SESIÓN DE ADMINISTRADOR:
+
+Usuario: admin
+Contraseña: admin123
+
+	
+
