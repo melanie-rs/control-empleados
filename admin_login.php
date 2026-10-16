@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <a href="index.php" class="btn-volver"><i class="fa-solid fa-arrow-left"></i> Volver al inicio</a>
 
             <div class="form-header">
-                <h2>Panel Admin</h2>
+                <h2>Inicie Sesión</h2>
             </div>
 
             <?php if (!empty($error)): ?>
@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <input type="password" name="password" placeholder="Contraseña" required>
                 </div>
 
-                <button type="submit" class="btn-submit">Ingresar como Admin</button>
+                <button type="submit" class="btn-submit">Ingresar como Administrador</button>
             </form>
 
         </div>

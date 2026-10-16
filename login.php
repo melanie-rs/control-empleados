@@ -96,11 +96,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </form>
         </div>
 
-        <!-- y esta la columna derecha del Panel Decorativo lilita -->
+        <!-- Columna derecha morada -->
         <div class="login-banner-section">
-            <div class="banner-overlay"></div>
-        </div>
-    </div>
+    <div class="banner-content">
+</div>
 
 </body>
 </html>
